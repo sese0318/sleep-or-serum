@@ -1,6 +1,6 @@
 # Sleep or Serum — demo script
 
-**Verified final recording:** `submission/demo/demo-captioned.mp4`, **103.2 seconds (1:43)**, H.264, 1280 × 800, 4,510,381 bytes. English captions. The video frame and five updated screenshots were visually reviewed; they show the genuine recorded YouCam result.
+**Verified final recording:** `submission/demo/demo-captioned.mp4`, **103.2 seconds (1:43)**, H.264, 1280 × 800, 4,550,441 bytes. English captions. The video frame and five updated screenshots were visually reviewed; they show the genuine recorded YouCam result.
 
 Use the regenerated recording listed above. Do not upload an older file with a “PREVIEW: docs example values” banner. Its verified duration meets the 1–3 minute requirement; watch it completely before publishing.
 

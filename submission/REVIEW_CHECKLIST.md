@@ -22,7 +22,7 @@
 - YouTube：本人の投稿待ち
 - Devpost：https://youcam-api-skin-ai-ecommerce.devpost.com/
 
-**素材：** `submission/DESCRIPTION.md`（英語説明）、`screenshots/`（最新5枚）、`demo/demo-captioned.mp4`（最新動画・4,510,381 bytes）、`DEMO_SCRIPT.md`（台本）、`VERCEL_DEPLOY.md`（公開手順）。
+**素材：** `submission/DESCRIPTION.md`（英語説明）、`screenshots/`（最新5枚）、`demo/demo-captioned.mp4`（最新動画・4,550,441 bytes）、`DEMO_SCRIPT.md`（台本）、`VERCEL_DEPLOY.md`（公開手順）。
 
 **11月20日11:45 ETまで無料の審査用入口を維持。** 保存済み結果の再生には鍵不要。見本の睡眠時間は仮の入力で、写真の人物の実際の睡眠や健康状態を示さない。購入・自動課金なし。
 

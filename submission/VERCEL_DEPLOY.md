@@ -44,4 +44,4 @@ If you skip the key, the site still works in **Sample mode** only, which is fine
 ## Notes
 
 - Paste the deployed URL into the Devpost form as the demo/testing link.
-- The repo can stay private on Vercel. For the Devpost "code repository" field, the rules require a public repo (with license) or a private repo shared with the address given in the rules.
+- The repo can stay private on Vercel. For the Devpost "code repository" field, the hackathon page requires a public repo (with license) or a private repo shared with contact_event@PerfectCorp.com.

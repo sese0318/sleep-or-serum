@@ -72,6 +72,7 @@ npm run build        # production build
 | `npm run record-sample` | Runs ONE real analysis on the sample photo (12 units) and saves the sanitized result. Refuses to run again unless you pass `-- --force` |
 | `npm run e2e` | Headless Chromium end-to-end check of Sample mode (start `npm run dev` first) |
 | `npm run capture` | Regenerates `submission/screenshots/*.png` and the demo video in `submission/demo/` |
+| `scripts\finalize.ps1` (Windows) | All of the above in one go: record the sample, start the dev server, run the e2e check, regenerate the screenshots and video |
 
 Run `npx playwright install chromium` once before `e2e` or `capture`.
 

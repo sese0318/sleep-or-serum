@@ -2,6 +2,8 @@
 
 **Before you buy that eye cream, check last night.**
 
+**Track:** Skin AI. The challenge brief asks for something that meets people "right when they're standing in front of a mirror deciding whether a product is working." Sleep or Serum is built for exactly that moment.
+
 ## Inspiration
 
 I study psychology at Bunker Hill Community College in Boston, and I keep coming back to sleep, dreams and the brain. Sleep research has a finding that sounds like a beauty tip but comes from controlled experiments: when the same people are photographed after a normal night and after sleep deprivation, observers rate them as having darker circles, more swollen eyes, more hanging eyelids and paler skin (Sundelin et al., 2013, *Sleep*). They also rate them as less healthy and more tired (Axelsson et al., 2010, *BMJ*).

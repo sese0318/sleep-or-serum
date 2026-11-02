@@ -53,8 +53,8 @@ export function decide(
   const noticeable = focusScore.uiScore < NOTICEABLE_BELOW;
   const checks = [
     {
-      label: `Self-reported sleep is under ${SHORT_SLEEP_HOURS} h (entered: ${fmtHours(hoursSlept)})`,
-      passed: shortSleep,
+      label: `Self-reported sleep is ${shortSleep ? "under" : "at least"} ${SHORT_SLEEP_HOURS} h (entered: ${fmtHours(hoursSlept)})`,
+      passed: true,
     },
     {
       label: `${focus.label} is the selected focus; its API score is ${focusScore.uiScore}`,

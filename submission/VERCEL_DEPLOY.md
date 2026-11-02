@@ -1,10 +1,10 @@
 # Deploy Sleep or Serum on Vercel
 
-**Current status:** https://github.com/sese0318/sleep-or-serum is public and the local production build passes. The Node.js 22 production deployment is **READY** at https://sleep-or-serum.vercel.app . Anonymous access returned HTTP 200 and the genuine recorded-result interaction was verified. The public judge entry is ready. A Production-only `YOUCAM_API_KEY` Secret is saved; the deployment applying that key and a fresh live test remain pending.
+**Current status:** https://github.com/sese0318/sleep-or-serum is public and the local production build passes. The Node.js 22 production deployment is **READY** at https://sleep-or-serum.vercel.app . Anonymous access returned HTTP 200 and the genuine recorded-result interaction was verified. The public judge entry is ready. The Production-only `YOUCAM_API_KEY` Secret is applied. Fresh production analysis passed: HTTP 200 from `POST /api/analyze`, followed by successful polling with five scores and five overlays. All 17 public Sample mode end-to-end checks also passed.
 
 **The genuine sample is ready.** `data/sample-result.json` has `recorded: true`, with a successful YouCam result recorded on November 2, 2026, at 15:58:46 UTC. It used 12 free units. The saved replay does not require a deployed API key.
 
-**Deployment:** `dpl_FuinJPcYHRh7sYtijimDcjS6cTZ6`, production, commit `ec32c6edeee129ebc2d47261dd896ad973e64b3e`.
+**Current deployment:** `dpl_VBKockgL76ot1w4Y2gfs8fCzoF54`, production, READY. No technical release blockers remain.
 
 **Public access verified.** With explicit user approval, sign-in protection was removed only for this project. Anonymous HTTP 200 and a successful sample interaction were confirmed at the canonical URL, showing genuine scores 73, 66, 77, 73 and 77. No private bypass credential is needed.
 
@@ -19,7 +19,7 @@
 
 The saved genuine sample can be deployed without an API key. The recording script has completed a real API upload, analysis task and polling cycle. Fresh browser analysis is optional for replay and requires separate deployed verification if enabled.
 
-The existing key has now been saved securely as a **Production-only Secret**, without displaying its value. A new deployment must apply it before fresh analysis is verified. For future manual updates, use these scopes:
+The existing key is applied securely as a **Production-only Secret**, without displaying its value. Fresh analysis has been verified on the current production deployment. For future manual updates, use these scopes:
 
 | Variable | Value | Scope |
 |---|---|---|

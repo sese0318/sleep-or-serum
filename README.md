@@ -12,10 +12,10 @@ The API describes visible features in an image. It does not establish why they a
 - **Genuine YouCam recording complete:** recorded at `2026-11-02T15:58:46.772Z`, with 8 output items and 6 saved-overlay entries. The single successful analysis used 12 free units.
 - **Local checks passed:** production build; all 17 sample end-to-end checks; home page HTTP 200; invalid task ID and invalid upload HTTP 400. A scan of client build files found no exact API-key value matches.
 - **Public judge app READY:** https://sleep-or-serum.vercel.app — anonymous HTTP 200 and genuine recorded-result interaction verified. Scores displayed: 73, 66, 77, 73, 77. Project-only sign-in protection was removed with explicit user approval.
-- **Live configuration:** `YOUCAM_API_KEY` is saved as a Production-only Secret. A new deployment to apply it and a fresh live-analysis test are still pending; recorded Sample mode is ready now.
+- **Production Live mode verified:** the Production-only `YOUCAM_API_KEY` is applied. A fresh `POST /api/analyze` returned HTTP 200; polling completed successfully with five scores and five overlays. Public Sample mode also passed all 17 end-to-end checks. No technical release blockers remain.
 - **Submission media verified:** five refreshed screenshots and a regenerated video use genuine recorded scores. Screenshot and video-frame inspection passed. `submission/demo/demo-captioned.mp4` is H.264, 1280 × 800, 103.2 seconds (1:43), 4,510,381 bytes. Plain MP4, WebM and captions were also regenerated.
 
-The genuine result is in `data/sample-result.json`. The public recorded-sample judge entry and submission media are ready. YouTube publication and Devpost submission are the entrant's actions; the video can be uploaded now.
+The genuine result is in `data/sample-result.json`. The public recorded-sample judge entry, fresh Live mode and submission media are ready. YouTube publication and Devpost submission are the entrant's actions; the video can be uploaded now.
 
 ## The experience
 

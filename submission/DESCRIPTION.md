@@ -77,7 +77,7 @@ App URL: https://sleep-or-serum.vercel.app . The recorded-sample judge entry is 
 
 Open the app URL in a browser. Choose **Sample mode**, enter a sleep value below 7 hours, choose a focus concern and open the mirror. Review the recorded result and the reflection. Change the sleep value to 8 hours: the reflection should change while all recorded API scores remain the same. Change the concern to inspect a different result. Replaying the saved genuine sample does not require a YouCam account or API key. All 17 sample end-to-end checks passed locally. The public judge URL was verified with anonymous HTTP 200 and a successful recorded-result interaction.
 
-A Production-only API key has been saved. Deployment of that key and a fresh live-analysis test are pending; use Sample mode for the verified judge experience. Use only a photo you are authorized to upload for any later live test.
+Live mode was verified on the production deployment: a fresh upload request returned HTTP 200 and polling completed with five scores and five overlays. The API key is configured only as a Production Secret. Sample mode also passed all 17 public end-to-end checks. Use only a photo you are authorized to upload.
 
 ## Sources and credits
 

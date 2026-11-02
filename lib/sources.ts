@@ -1,4 +1,4 @@
-/** Peer-reviewed sources cited in the UI. Each one was checked on PubMed. */
+/** Background reading. These studies do not validate the app rule or YouCam scores. */
 export const SOURCES = {
   sundelin2013: {
     short: "Sundelin et al., 2013",

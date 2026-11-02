@@ -29,6 +29,21 @@ function authHeaders(): Record<string, string> {
   return { Authorization: `Bearer ${key}`, "Content-Type": "application/json" };
 }
 
+/** Refuse inference when the account does not have enough prepaid/free units. */
+export async function requireAvailableUnits(): Promise<void> {
+  const res = await fetch(`${YOUCAM_API_BASE}/s2s/v1.0/client/credit`, {
+    headers: authHeaders(), cache: "no-store", signal: AbortSignal.timeout(15_000),
+  });
+  const body = await res.json().catch(() => ({}));
+  const entries = body?.results ?? body?.data?.results;
+  const available = Array.isArray(entries)
+    ? entries.reduce((sum: number, item: any) => sum + (Number(item.amount) || 0), 0)
+    : 0;
+  if (!res.ok || available < 12) {
+    throw new YouCamError("Live analysis is temporarily unavailable. Please use the recorded sample.", 503, "insufficient_units");
+  }
+}
+
 export class YouCamError extends Error {
   constructor(
     message: string,

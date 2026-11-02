@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { hasApiKey, startSkinAnalysis, uploadImage, YouCamError } from "@/lib/youcam";
+import { hasApiKey, requireAvailableUnits, startSkinAnalysis, uploadImage, YouCamError } from "@/lib/youcam";
 import { allowLiveAnalysis } from "@/lib/ratelimit";
 
 export const runtime = "nodejs";
@@ -34,6 +34,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Photo is too large", code: "too_large" }, { status: 413 });
   }
   try {
+    await requireAvailableUnits();
     const bytes = await file.arrayBuffer();
     const contentType = file.type === "image/png" ? "image/png" : "image/jpg";
     const fileId = await uploadImage(bytes, contentType, file.type === "image/png" ? "selfie.png" : "selfie.jpg");
@@ -41,7 +42,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ taskId });
   } catch (e) {
     const err = e instanceof YouCamError ? e : new YouCamError("Unexpected error");
-    console.error("[analyze]", err.code, err.message);
+    console.error("[analyze]", err.code);
     return NextResponse.json({ error: err.message, code: err.code }, { status: err.status });
   }
 }

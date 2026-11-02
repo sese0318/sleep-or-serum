@@ -1,102 +1,94 @@
 # Sleep or Serum
 
-**Before you buy that eye cream, check last night.**
+**A moment to pause before your next skincare purchase.**
 
-Sleep or Serum is a one-screen web app. You take or upload a selfie and enter how many hours you slept last night. The app sends the photo to the **YouCam AI Skin Analysis API**, shows five skin-concern scores in a mirror-shaped card next to your sleep hours, and gives one of two verdicts:
+Sleep or Serum is a one-screen cosmetic reflection app built with the **YouCam AI Skin Analysis API**. It places five appearance scores beside your self-reported sleep hours, so you can review a photo in context before deciding what to do next.
 
-- **Sleep:** "Sleep 3 good nights before buying that eye cream." The concern you were about to buy for is one that changes with sleep loss, and last night was short.
-- **Serum:** "This concern doesn't change much with sleep. Choose a product for it." The app suggests a product *category*. It never names a brand.
+The API describes visible features in an image. It does not establish why they appear, measure sleep, diagnose a condition, or determine whether you need a product. Sleep hours never change the API scores.
 
-The rule is simple and the app shows it: every check, every cut-off, and the peer-reviewed source behind each one.
+## The experience
 
-> **Not medical advice.** This is a consumer demo for cosmetic shopping decisions. It does not diagnose anything.
+1. Choose Live mode and upload a face photo, or use the clearly labeled recorded sample when available.
+2. Enter last night's sleep hours and choose the concern you want to explore.
+3. Review the five YouCam scores and any returned overlays in an arched mirror.
+4. Read a transparent reflection prompt: **Pause & reassess** below 7 hours, or **Review your options** otherwise.
 
-## Which YouCam API is used, and how
+The 7-hour branch is an app reflection rule inspired by general adult sleep guidance; it is not a personalized recommendation or a validated skin model. The 80-point bar marker is a visual guide, not a medical threshold, and does not determine the reflection. Selecting a concern only changes the focus. Product categories are optional information, never a finding that a purchase is necessary.
 
-**AI Skin Analysis, V2 API, SD mode, `format: "json"`.** Docs: https://docs.perfectcorp.com/reference/ai_skin_analysis
+## YouCam integration
 
-| Step | Call | Where in the code |
+This project uses **AI Skin Analysis, V2 API, SD concerns, JSON output**. [Official API documentation](https://docs.perfectcorp.com/reference/ai_skin_analysis).
+
+| Step | Request | Implementation |
 |---|---|---|
-| 1 | `POST https://yce-api-01.makeupar.com/s2s/v2.0/file` with `{ files: [{ content_type, file_name, file_size }] }` returns a `file_id` and a pre-signed upload URL | `lib/youcam.ts` `uploadImage()` |
-| 2 | `PUT` the image bytes to the pre-signed URL with the headers the File API returned | `lib/youcam.ts` `uploadImage()` |
-| 3 | `POST /s2s/v2.0/task/skin-analysis` with `src_file_id`, `dst_actions`, `miniserver_args.enable_mask_overlay: true`, `format: "json"` returns a `task_id` | `lib/youcam.ts` `startSkinAnalysis()` |
-| 4 | `GET /s2s/v2.0/task/skin-analysis/{task_id}` until `task_status` is `success` or `error`. The browser polls our route every 3 s | `lib/youcam.ts` `checkSkinAnalysis()`, `app/api/analyze/[taskId]/route.ts` |
-| 5 | Read `results.output[]` (`type`, `ui_score`, `raw_score`, `mask_urls`) and apply the verdict rule | `lib/verdict.ts` |
+| Register image | `POST /s2s/v2.0/file` | `lib/youcam.ts`, `uploadImage()` |
+| Upload bytes | `PUT` to the returned pre-signed URL | `lib/youcam.ts`, `uploadImage()` |
+| Start analysis | `POST /s2s/v2.0/task/skin-analysis` | `lib/youcam.ts`, `startSkinAnalysis()` |
+| Poll status | `GET /s2s/v2.0/task/skin-analysis/{task_id}` | `lib/youcam.ts`, `checkSkinAnalysis()` |
+| Display output | Read concern scores and available masks | `app/SleepOrSerum.tsx` |
 
-Auth is `Authorization: Bearer <YOUCAM_API_KEY>`. The key is read from `process.env` inside server route handlers only (`import "server-only"`). It is never sent to the browser, logged, or committed.
+Requested concerns are `dark_circle_v2`, `eye_bag`, `droopy_upper_eyelid`, `radiance`, and `age_spot`. These are separate appearance outputs, not classifications of how sleep affects an individual.
 
-**Concerns requested (`dst_actions`, all SD):** `dark_circle_v2`, `eye_bag`, `droopy_upper_eyelid`, `radiance`, `age_spot`. According to the docs, 5 to 8 SD concerns cost **12 units** per successful analysis. Failed tasks cost nothing.
+`YOUCAM_API_KEY` is read in the server-only module. The browser talks to the app's route handlers. Keep the key in `.env.local` locally and in server environment configuration when deploying. Never put it in a `NEXT_PUBLIC_*` variable, a screenshot, or source control.
 
-| Concern | Treated as | Why |
-|---|---|---|
-| Dark circles | sleep-sensitive | Darker circles were rated after sleep deprivation (Sundelin et al., 2013) |
-| Eye bags | sleep-sensitive | More swollen eyes (Sundelin et al., 2013) |
-| Droopy upper eyelid | sleep-sensitive | More hanging eyelids (Sundelin et al., 2013) |
-| Radiance | sleep-sensitive | Paler skin (Sundelin et al., 2013), mapped to YouCam's skin-brightness score |
-| Age spots | **not** sleep-sensitive | Not among the cues that changed with sleep loss in Sundelin et al. (2013). This is the control concern |
+## Judge access and recorded sample
 
-### The verdict rule (`lib/verdict.ts`)
+When a genuine recording is available, Sample mode replays the saved response for the licensed sample photo. It makes no fresh YouCam request and needs no key. Sleep and concern controls recompute only the app's reflection; the recorded API scores stay fixed.
 
-1. **Focus concern** = what the user says they were about to buy, or their lowest `ui_score` if they are not sure.
-2. **Short night** = under 7 hours. Adults are advised to sleep 7 or more hours (Watson et al., 2015, AASM/SRS consensus).
-3. If the focus concern is sleep-sensitive **and** the night was short, the verdict is **Sleep**. Otherwise it is **Serum**, with a product category.
-4. A `ui_score` below 80 is shown as "noticeable". That cut-off is the app's own choice, not a clinical threshold, and the UI says so. "3 nights" is a rule of thumb: long enough to retake the photo before spending money.
+**Recording status is authoritative in `data/sample-result.json`.** A file with `recorded: false` is not a completed API result. A preview using documentation/example values must never be described as a genuine recording or used as final integration evidence. Create the real recording and regenerate screenshots/video before submission.
 
-## Sample mode (for judges, no key needed)
+`scripts/record-sample.mjs` uses the same upload, task and polling flow, removes temporary IDs and signed URLs, and saves available overlays locally. Confirm free-unit balance before running it. No purchase or automatic recharge is part of this project.
 
-Sample mode replays **one recorded real API response** for the sample photo (`data/sample-result.json`, plus YouCam's overlay images in `public/sample/masks/`). The app labels it as a recorded sample, makes no API call, and needs no key. Moving the hours slider or changing the product choice recomputes the verdict, so judges can test the logic for free. If the server has no `YOUCAM_API_KEY`, the app opens in Sample mode and turns Live mode off.
+Judges should have free access through November 20, 2026, 11:45 a.m. Eastern Time. Provide the final deployment URL in the submission and test it in a signed-out browser.
 
-The recording was made with `scripts/record-sample.mjs`. The script does the same File → task → poll flow, removes task/file IDs and signed URLs, and saves the overlays locally because YouCam's download links expire after about 2 hours.
+## Run locally
 
-## Run it locally
-
-Requires Node.js 18.18+ (tested with Node 22).
+Use Node.js 22 and npm.
 
 ```bash
 npm install
-# optional, for Live mode: put your key in .env.local
-#   YOUCAM_API_KEY=your_key_here
-npm run dev          # http://localhost:3000
-npm run build        # production build
+# For Live mode only, create the git-ignored .env.local:
+# YOUCAM_API_KEY=your_key_here
+npm run dev
 ```
 
-| Env var | Required | Purpose |
-|---|---|---|
-| `YOUCAM_API_KEY` | No (Sample mode works without it) | Enables Live mode. Server-side only |
-| `LIVE_DAILY_LIMIT_PER_IP` | No (default 5) | Best-effort, in-memory cap on live analyses per IP per day, so a public demo cannot burn through your units |
+Open `http://localhost:3000`.
 
-### Scripts
-
-| Command | What it does |
+| Command | Purpose |
 |---|---|
-| `npm run record-sample` | Runs ONE real analysis on the sample photo (12 units) and saves the sanitized result. Refuses to run again unless you pass `-- --force` |
-| `npm run e2e` | Headless Chromium end-to-end check of Sample mode (start `npm run dev` first) |
-| `npm run capture` | Regenerates `submission/screenshots/*.png` and the demo video in `submission/demo/` |
-| `scripts\finalize.ps1` (Windows) | All of the above in one go: record the sample, start the dev server, run the e2e check, regenerate the screenshots and video |
+| `npm run build` | Production build |
+| `npm run typecheck` | TypeScript check |
+| `npm run record-sample` | Record one genuine result using available API units |
+| `npm run e2e` | Check the sample interaction with Playwright; start the app first |
+| `npm run capture` | Regenerate screenshots and video materials from the running app |
 
-Run `npx playwright install chromium` once before `e2e` or `capture`.
+Run `npx playwright install chromium` if Chromium is not installed. The recording script prevents accidental replacement unless explicitly forced.
 
-## Privacy
+| Environment variable | Purpose |
+|---|---|
+| `YOUCAM_API_KEY` | Enables fresh server-side analyses; unnecessary for replay of an existing genuine sample |
+| `LIVE_DAILY_LIMIT_PER_IP` | Best-effort in-memory daily limit for fresh requests (default 5); not durable across server instances |
 
-In Live mode the photo is resized in the browser (long side ≤ 2048 px) and forwarded to the YouCam API for that one analysis. This app has no database and does not store photos or results. YouCam's docs say uploaded files are kept on their servers for 24 hours.
+The per-IP limit is a lightweight demo guard, not a guaranteed spending cap. Check the provider account's free-unit balance and settings before enabling public Live mode.
 
-## Project layout
+## Photos and privacy
 
-```
-app/page.tsx                    server component: picks Live vs Sample mode
-app/SleepOrSerum.tsx            the whole UI (client component)
-app/api/analyze/route.ts        POST: File API upload + start task
-app/api/analyze/[taskId]/...    GET: poll task status
-lib/youcam.ts                   YouCam API client (server-only)
-lib/verdict.ts                  the transparent verdict rule
-lib/concerns.ts, lib/sources.ts concern config and verified citations
-data/sample-result.json         recorded real API result (Sample mode)
-scripts/                        record-sample, e2e-sample, capture-demo
-submission/                     Devpost text, screenshots, demo video, deploy guide
-```
+Live mode resizes the selected photo in the browser and forwards it to YouCam for processing. The app has no photo database. The intentionally included sample photo, saved sample result and overlays are public demo assets. User-uploaded photos are not added to those assets.
 
-## Credits and license
+YouCam processes uploads under its own terms and retention policy. Read those before uploading a photo. Use only a photo you are authorized to submit.
 
-The sample photo is by Wanas Rosa on Pexels, used under the Pexels License. Skin analysis is by the YouCam AI Skin Analysis API (Perfect Corp.). The full list of sources is in [CREDITS.md](CREDITS.md).
+## Project files
 
-Code is released under the [MIT License](LICENSE).
+- `app/`: interface and server route handlers.
+- `lib/youcam.ts`: server-only YouCam client.
+- `lib/verdict.ts`: transparent reflection rules, separate from the API outputs.
+- `data/sample-result.json`: recording status and sanitized sample response.
+- `public/sample/`: licensed demo image and available saved overlays.
+- `scripts/`: recording, end-to-end checks and screen capture.
+- `submission/`: English project copy, demo script, screenshots, video and final review checklist.
+
+## Credits and limitations
+
+The demo photo is by Wanas Rosa, used under the Pexels License. The person pictured does not endorse the app; no sleep history is inferred about that person. Entered sleep values in the demo are hypothetical. See [CREDITS.md](CREDITS.md).
+
+Research sources are background inspiration, not validation of the YouCam model or the app's thresholds. This is a cosmetic demonstration, not medical advice. Code is [MIT licensed](LICENSE); the photo retains its separate Pexels license.

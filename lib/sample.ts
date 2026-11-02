@@ -34,7 +34,7 @@ export function loadSample(): SampleData {
   const age = output.find((o) => o.type === "skin_age");
   const preview = Boolean(s?.preview) && scores.length > 0;
   return {
-    recorded: (Boolean(s?.recorded) && scores.length > 0) || preview,
+    recorded: Boolean(s?.recorded) && !preview && s?.response?.data?.task_status === "success" && scores.length === CONCERN_IDS.length,
     preview,
     recordedAt: s?.recorded_at,
     unitsUsed: s?.units_used ?? null,

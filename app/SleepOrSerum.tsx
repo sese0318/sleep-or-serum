@@ -18,7 +18,7 @@ const MAX_SIDE = 2048;
 const MIN_SHORT_SIDE = 480; // YouCam SD skin analysis minimum
 
 export default function SleepOrSerum({ liveAvailable, sample }: Props) {
-  const [mode, setMode] = useState<Mode>(liveAvailable ? "live" : "sample");
+  const [mode, setMode] = useState<Mode>(sample.recorded ? "sample" : liveAvailable ? "live" : "sample");
   const [phase, setPhase] = useState<Phase>("setup");
   const [hours, setHours] = useState(5.5);
   const [wanted, setWanted] = useState<ConcernId | "auto">("auto");
@@ -38,7 +38,10 @@ export default function SleepOrSerum({ liveAvailable, sample }: Props) {
     [scores, hours, wanted],
   );
 
-  useEffect(() => () => { cancelled.current = true; }, []);
+  useEffect(() => {
+    cancelled.current = false;
+    return () => { cancelled.current = true; };
+  }, []);
 
   function reset() {
     setPhase("setup");
@@ -70,11 +73,11 @@ export default function SleepOrSerum({ liveAvailable, sample }: Props) {
     setOverlay(null);
     if (mode === "sample") {
       if (!sample.recorded) {
-        setError("The recorded sample has not been added yet. Run `npm run record-sample` once with an API key.");
+        setError("The recorded sample is not available in this build yet. Please use Live mode if it is available.");
         return;
       }
       setPhase("analyzing");
-      setProgress("Replaying the recorded YouCam result (no API call)...");
+      setProgress(sample.preview ? "Opening layout preview (not an API result)…" : "Replaying the recorded YouCam result (no API call)…");
       await sleep(1600);
       setScores(sample.scores);
       setPhase("result");
@@ -101,13 +104,16 @@ export default function SleepOrSerum({ liveAvailable, sample }: Props) {
         const r = await fetch(`/api/analyze/${encodeURIComponent(taskId)}`, { cache: "no-store" });
         const j = await r.json();
         if (j.status === "success") {
+          if (!Array.isArray(j.scores) || j.scores.length === 0) {
+            throw new Error("YouCam returned no usable scores. Please try another photo.");
+          }
           setScores(j.scores);
           setPhase("result");
           setTimeout(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
           return;
         }
         if (j.status === "error") throw new Error(friendlyError(j.error, j.message));
-        if (Date.now() - t0 > 120_000) throw new Error("The analysis took too long. Please try again.");
+        if (Date.now() - t0 > 120_000) throw new Error("The analysis is taking longer than expected and may still complete. Avoid starting another analysis immediately.");
       }
     } catch (err) {
       setError((err as Error).message);
@@ -130,8 +136,8 @@ export default function SleepOrSerum({ liveAvailable, sample }: Props) {
           <p className="eyebrow">Sleep or Serum</p>
           <h1>Before you buy that eye cream, check last night.</h1>
           <p className="lede">
-            Take a selfie and tell us how long you slept. YouCam AI Skin Analysis scores five concerns, and a simple,
-            visible rule tells you whether to <strong>sleep first</strong> or <strong>choose a product</strong>.
+            See five YouCam skin observations beside your own sleep record. A transparent reflection prompt helps you
+            <strong> pause and reassess</strong> before a skincare purchase.
           </p>
         </header>
 
@@ -145,7 +151,7 @@ export default function SleepOrSerum({ liveAvailable, sample }: Props) {
             className={mode === "live" ? "on" : ""}
             onClick={() => liveAvailable && switchMode("live")}
             disabled={!liveAvailable}
-            title={liveAvailable ? "Analyze your own photo" : "Live mode needs YOUCAM_API_KEY on the server"}
+            title={liveAvailable ? "Analyze your own photo" : "Live analysis is unavailable in this demo"}
           >
             My photo (live)
           </button>
@@ -153,20 +159,20 @@ export default function SleepOrSerum({ liveAvailable, sample }: Props) {
 
         {mode === "sample" && !sample.recorded ? (
           <div className="banner sample" data-testid="sample-banner">
-            <strong>SAMPLE MODE: no recording yet.</strong> The recorded sample result has not been added to this build. Run{" "}
-            <code>npm run record-sample</code> once with an API key, then rebuild.
+            <strong>SAMPLE MODE: no recording yet.</strong> A genuine recorded result is not available in this build.
+            Live mode can analyze your photo when available.
           </div>
         ) : mode === "sample" && sample.preview ? (
           <div className="banner sample" data-testid="sample-banner">
             <strong>PREVIEW DATA: not a recording.</strong> These scores are the example values from the YouCam Skin Analysis
-            docs, used only to preview the layout until the real sample is recorded with <code>npm run record-sample</code>.
+            docs, used only to preview the layout. They are not measurements of the sample photo.
           </div>
         ) : mode === "sample" ? (
           <div className="banner sample" data-testid="sample-banner">
             <strong>SAMPLE MODE: recorded result.</strong> This replays a real YouCam AI Skin Analysis API response that
             was recorded once{sample.recordedAt ? ` on ${sample.recordedAt.slice(0, 10)}` : ""} for the sample photo below.
-            No API call is made and no key is needed. Change the hours slept to see how the verdict changes.
-            {!liveAvailable && <span className="muted"> (Live mode is off because no API key is configured.)</span>}
+            No API call is made and no key is needed. Sleep hours are an editable example, not information about the person pictured. Changing them updates the reflection prompt only.
+            {!liveAvailable && <span className="muted"> (Live analysis is unavailable in this demo.)</span>}
           </div>
         ) : (
           <div className="banner live">
@@ -179,7 +185,7 @@ export default function SleepOrSerum({ liveAvailable, sample }: Props) {
           <div className="step">
             <span className="num">1</span>
             <div className="step-body">
-              <h2>Your face</h2>
+              <h2>{mode === "sample" ? "Sample photo" : "Your photo"}</h2>
               {mode === "sample" ? (
                 <p className="muted small">
                   Sample photo: &ldquo;Portrait of a Woman in Goi&acirc;nia, Brazil&rdquo; by Wanas Rosa on Pexels (Pexels License), cropped. The person pictured does not endorse this app.
@@ -209,7 +215,7 @@ export default function SleepOrSerum({ liveAvailable, sample }: Props) {
             <span className="num">2</span>
             <div className="step-body">
               <h2>
-                <label htmlFor="hours">Hours slept last night</label>
+                <label htmlFor="hours">{mode === "sample" ? "Example sleep hours" : "Hours slept last night"}</label>
               </h2>
               <div className="hours-row">
                 <input
@@ -226,8 +232,8 @@ export default function SleepOrSerum({ liveAvailable, sample }: Props) {
               </div>
               <p className="muted small">
                 {hours < SHORT_SLEEP_HOURS
-                  ? `Short night: under the ${SHORT_SLEEP_HOURS} h adults are advised to get (${SOURCES.watson2015.short}).`
-                  : `${SHORT_SLEEP_HOURS} h or more: in line with the adult recommendation (${SOURCES.watson2015.short}).`}
+                  ? `Below this app's ${SHORT_SLEEP_HOURS} h reflection marker. This is context you enter, not a measurement from the photo.`
+                  : `At or above this app's ${SHORT_SLEEP_HOURS} h reflection marker. This does not establish sleep quality or explain a skin score.`}
               </p>
             </div>
           </div>
@@ -239,7 +245,7 @@ export default function SleepOrSerum({ liveAvailable, sample }: Props) {
                 <label htmlFor="wanted">What were you about to buy?</label>
               </h2>
               <select id="wanted" data-testid="wanted" value={wanted} onChange={(e) => setWanted(e.target.value as ConcernId | "auto")}>
-                <option value="auto">Not sure: use my lowest score</option>
+                <option value="auto">Not sure: highlight the lowest score</option>
                 {CONCERNS.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.buyingFor}
@@ -252,7 +258,7 @@ export default function SleepOrSerum({ liveAvailable, sample }: Props) {
           {error && <p className="error" role="alert">{error}</p>}
 
           <button className="btn primary big" data-testid="analyze" onClick={analyze} disabled={phase === "analyzing"}>
-            {phase === "analyzing" ? "Looking in the mirror..." : mode === "sample" ? "Look in the mirror (sample)" : "Look in the mirror"}
+            {phase === "analyzing" ? "Looking in the mirror…" : mode === "sample" ? "Look in the mirror (sample)" : "Look in the mirror"}
           </button>
           {phase === "analyzing" && (
             <p className="progress" aria-live="polite">
@@ -288,8 +294,8 @@ export default function SleepOrSerum({ liveAvailable, sample }: Props) {
               </div>
 
               <div className="scores-col">
-                <h2 className="section-title">What the mirror measured</h2>
-                <p className="muted small">YouCam ui_score, 1 to 100: higher means less visible. Marker = {NOTICEABLE_BELOW}.</p>
+                <h2 className="section-title">What YouCam observed</h2>
+                <p className="muted small">YouCam ui_score, 1 to 100. Higher indicates a more favorable cosmetic score. The {NOTICEABLE_BELOW} marker is a visual guide only, not a clinical threshold.</p>
                 <ul className="scores" data-testid="scores">
                   {CONCERNS.map((c) => {
                     const s = scores.find((x) => x.id === c.id);
@@ -299,9 +305,7 @@ export default function SleepOrSerum({ liveAvailable, sample }: Props) {
                       <li key={c.id} className={isFocus ? "focus" : ""}>
                         <div className="score-head">
                           <span className="score-label">{c.label}{isFocus && <em> (focus)</em>}</span>
-                          <span className={c.sleepSensitive ? "tag tag-sleep" : "tag tag-steady"}>
-                            {c.sleepSensitive ? "sleep-sensitive" : "not sleep-sensitive"}
-                          </span>
+                          <span className="tag tag-steady">YouCam score</span>
                           <span className="score-num">{s.uiScore}</span>
                         </div>
                         <div className="bar">
@@ -314,29 +318,29 @@ export default function SleepOrSerum({ liveAvailable, sample }: Props) {
                 </ul>
                 <div className="sleep-meter">
                   <div className="score-head">
-                    <span className="score-label">Sleep last night</span>
+                    <span className="score-label">{mode === "sample" ? "Example sleep hours" : "Self-reported sleep"}</span>
                     <span className="score-num">{fmtHours(hours)}</span>
                   </div>
                   <div className="bar sleep">
                     <div className={hours < SHORT_SLEEP_HOURS ? "fill low" : "fill"} style={{ width: `${(Math.min(hours, 12) / 12) * 100}%` }} />
                     <div className="marker" style={{ left: `${(SHORT_SLEEP_HOURS / 12) * 100}%` }} />
                   </div>
-                  <p className="muted small">Marker = {SHORT_SLEEP_HOURS} h</p>
+                  <p className="muted small">Reflection marker = {SHORT_SLEEP_HOURS} h. Not measured by YouCam.</p>
                 </div>
               </div>
             </div>
 
             <div className={`verdict ${verdict.kind}`} data-testid="verdict" data-kind={verdict.kind}>
-              <p className="verdict-kicker">{verdict.kind === "sleep-first" ? "Verdict: SLEEP" : "Verdict: SERUM"}</p>
+              <p className="verdict-kicker">Shopping reflection · simple app rule</p>
               <h2 data-testid="verdict-headline">{verdict.headline}</h2>
               <p>{verdict.detail}</p>
               {verdict.kind === "choose-product" && (
-                <p className="muted small">Product categories only. We do not recommend brands.</p>
+                <p className="muted small">Category information only. No brand, treatment, or expected result is recommended.</p>
               )}
             </div>
 
             <div className="panel how" data-testid="how">
-              <h2 className="section-title">How we decided</h2>
+              <h2 className="section-title">How this prompt works</h2>
               <p className="small">
                 Focus concern: <strong>{verdict.focus.label}</strong>{" "}
                 {verdict.focusWasAuto ? "(your lowest score)" : "(what you were about to buy)"}.
@@ -349,17 +353,17 @@ export default function SleepOrSerum({ liveAvailable, sample }: Props) {
                 ))}
               </ul>
               <p className="small rule">
-                Rule: if the focus concern is sleep-sensitive <em>and</em> you slept under {SHORT_SLEEP_HOURS} h, sleep first.
-                Otherwise, choose a product for it. &ldquo;3 nights&rdquo; is this app&rsquo;s rule of thumb, not a clinical number:
-                long enough to retake the photo before spending money.
+                Rule: entered sleep under {SHORT_SLEEP_HOURS} h shows &ldquo;Pause &amp; reassess&rdquo;; otherwise,
+                &ldquo;Review your options.&rdquo; This applies equally to all five concerns. Scores highlight what to look
+                at, but do not determine the cause, a diagnosis, or whether to buy skincare.
               </p>
-              <p className="small">Why it is sleep-sensitive (or not): {verdict.focus.evidence}</p>
+              <p className="small">Research context and limits: {verdict.focus.evidence}</p>
             </div>
           </section>
         )}
 
         <section className="panel evidence">
-          <h2 className="section-title">The evidence behind the rule</h2>
+          <h2 className="section-title">Background reading, with limits</h2>
           <ul className="sources">
             {Object.values(SOURCES).map((s) => (
               <li key={s.short}>
@@ -373,16 +377,17 @@ export default function SleepOrSerum({ liveAvailable, sample }: Props) {
             ))}
           </ul>
           <p className="small muted">
-            These studies used observers&rsquo; ratings of photos, not YouCam scores. Sleep-sensitivity here is a simple
-            classification by this app, not a measurement of you.
+            The appearance studies used observers&rsquo; ratings, not YouCam scores. They do not validate this app&rsquo;s
+            reflection rule or predict how your skin will respond to sleep or a product. The 7-hour marker comes from
+            general adult sleep guidance, not an individual assessment.
           </p>
         </section>
 
         <footer className="footer">
           <p className="disclaimer" data-testid="disclaimer">
-            <strong>Not medical advice.</strong> Sleep or Serum is a consumer demo for cosmetic shopping decisions. It does not
-            diagnose any condition. If you have persistent swelling, eyelid drooping, skin changes or sleep problems, talk to a
-            doctor or dermatologist.
+            <strong>Not medical advice.</strong> This cosmetic demo does not diagnose conditions, identify causes, or predict
+            treatment results. Photo lighting and capture conditions can affect observations. Seek professional advice
+            for health concerns.
           </p>
           <p className="small muted">
             Skin scores by the YouCam AI Skin Analysis API (Perfect Corp.). Sample photo by Wanas Rosa (Pexels). MIT licensed.

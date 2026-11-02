@@ -1,11 +1,6 @@
-/**
- * The five YouCam AI Skin Analysis (SD) concerns this app requests, and how
- * the app treats each one. Concern IDs are the exact `dst_actions` values from
- * the YouCam API docs (POST /s2s/v2.0/task/skin-analysis).
- *
- * "sleepSensitive" is the app's own, deliberately simple classification. It is
- * based on Sundelin et al. (2013), where observers rated photos of the same
- * people after normal sleep vs. after sleep deprivation (see lib/sources.ts).
+/** Exact SD concern IDs requested from the YouCam AI Skin Analysis API.
+ * Research context is background reading, not a classifier or an explanation
+ * of an individual's score. Product categories are shopping context only.
  */
 export type ConcernId =
   | "dark_circle_v2"
@@ -17,12 +12,8 @@ export type ConcernId =
 export interface ConcernInfo {
   id: ConcernId;
   label: string;
-  /** What the user might be about to buy for this concern. */
   buyingFor: string;
-  sleepSensitive: boolean;
-  /** One-line, source-backed reason for the classification. */
   evidence: string;
-  /** Generic product category (no brands). */
   productCategory: string;
 }
 
@@ -31,49 +22,36 @@ export const CONCERNS: ConcernInfo[] = [
     id: "dark_circle_v2",
     label: "Dark circles",
     buyingFor: "Eye cream for dark circles",
-    sleepSensitive: true,
-    evidence:
-      "Darker circles under the eyes were rated after sleep deprivation (Sundelin et al., 2013).",
-    productCategory:
-      "Brightening eye cream, or a color-correcting concealer for an instant fix",
+    evidence: "Observer-rated dark circles changed in a small sleep-deprivation study. That does not establish why this photo received its YouCam score.",
+    productCategory: "Eye cream or concealer",
   },
   {
     id: "eye_bag",
     label: "Eye bags",
-    buyingFor: "Depuffing eye gel / patches",
-    sleepSensitive: true,
-    evidence:
-      "More swollen eyes were rated after sleep deprivation (Sundelin et al., 2013).",
-    productCategory: "Cooling, depuffing eye gel or under-eye patches",
+    buyingFor: "Eye gel / patches",
+    evidence: "Observer-rated eye swelling changed in a small sleep-deprivation study. A single photo cannot identify its cause or predict a product's effect.",
+    productCategory: "Eye gel or under-eye patches",
   },
   {
     id: "droopy_upper_eyelid",
     label: "Droopy upper eyelid",
-    buyingFor: "Firming eyelid cream",
-    sleepSensitive: true,
-    evidence:
-      "More hanging eyelids were rated after sleep deprivation (Sundelin et al., 2013).",
-    productCategory:
-      "Firming eye cream (expect subtle results; ask a dermatologist about persistent hooding)",
+    buyingFor: "Eyelid skincare",
+    evidence: "Observer-rated hanging eyelids changed in a small sleep-deprivation study. This app cannot determine a cause or whether skincare would help.",
+    productCategory: "Eye-area skincare",
   },
   {
     id: "radiance",
     label: "Radiance",
     buyingFor: "Glow / brightening serum",
-    sleepSensitive: true,
-    evidence:
-      "Paler skin was rated after sleep deprivation (Sundelin et al., 2013). This app maps that to YouCam's radiance (skin brightness) score.",
-    productCategory: "Gentle exfoliating toner plus a daily SPF moisturizer",
+    evidence: "The study assessed perceived paleness, not the YouCam radiance score. These are different measures and are not treated as equivalent here.",
+    productCategory: "Moisturizer or radiance-focused skincare",
   },
   {
     id: "age_spot",
     label: "Age spots",
     buyingFor: "Dark-spot serum",
-    sleepSensitive: false,
-    evidence:
-      "Pigment spots were not among the facial cues that changed after sleep deprivation in Sundelin et al. (2013), so this app treats them as not sleep-sensitive.",
-    productCategory:
-      "Brightening / dark-spot serum plus daily broad-spectrum SPF 30+",
+    evidence: "The cited study does not establish how this YouCam metric relates to sleep. This app makes no sleep-related claim about pigment spots.",
+    productCategory: "Skincare marketed for uneven tone",
   },
 ];
 

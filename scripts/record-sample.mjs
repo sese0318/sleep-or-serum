@@ -59,6 +59,10 @@ async function main() {
   const json = { ...auth, "Content-Type": "application/json" };
 
   const unitsBefore = await totalUnits(auth);
+  if (unitsBefore == null || unitsBefore < 12) {
+    console.error("Recording stopped: at least 12 available units must be verified. Redeem the free hackathon code in your account first. No analysis was started.");
+    process.exit(1);
+  }
 
   // 1) File API: get a pre-signed upload URL + file_id
   const bytes = await readFile(IMAGE);

@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Sleep or Serum: check last night before you buy that eye cream",
   description:
-    "Upload a selfie, enter last night's sleep, and get a transparent verdict: sleep first, or choose a product. Powered by the YouCam AI Skin Analysis API.",
+    "See five YouCam skin observations beside self-reported sleep, then pause and reassess before a skincare purchase. A transparent cosmetic demo, not a diagnosis.",
 };
 
 export const viewport: Viewport = {

@@ -6,7 +6,7 @@
  * demo-captioned.mp4, captions.srt when ffmpeg is on PATH).
  */
 import { chromium } from "playwright";
-import { mkdir, rm, rename, readdir, writeFile } from "node:fs/promises";
+import { mkdir, rm, rename, readdir, readFile, writeFile } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -17,6 +17,15 @@ const SHOTS = path.join(ROOT, "submission", "screenshots");
 const DEMO = path.join(ROOT, "submission", "demo");
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
+// Fail before replacing deliverables if the real recording is not ready.
+const sample = JSON.parse(await readFile(path.join(ROOT, "data", "sample-result.json"), "utf8"));
+const requiredConcerns = ["dark_circle_v2", "eye_bag", "droopy_upper_eyelid", "radiance", "age_spot"];
+const recordedOutput = sample.response?.data?.results?.output ?? [];
+if (sample.recorded !== true || sample.preview || sample.response?.data?.task_status !== "success" ||
+    !requiredConcerns.every((type) => recordedOutput.some((item) => item.type === type && Number.isFinite(item.ui_score)))) {
+  throw new Error("Capture requires a genuine successful YouCam recording with all five scores. Preview or unrecorded data cannot be submitted.");
+}
+
 await mkdir(SHOTS, { recursive: true });
 await mkdir(DEMO, { recursive: true });
 const browser = await chromium.launch();
@@ -25,6 +34,10 @@ async function openSample(page) {
   await page.goto(BASE, { waitUntil: "networkidle" });
   const tab = page.getByRole("tab", { name: "Sample mode" });
   if ((await tab.getAttribute("aria-selected")) !== "true") await tab.click();
+  const banner = await page.getByTestId("sample-banner").innerText();
+  if (!/SAMPLE MODE: recorded result/i.test(banner) || /PREVIEW|not a real result/i.test(banner)) {
+    throw new Error("The served app is not showing the genuine recorded sample. Restart or rebuild before capture.");
+  }
 }
 
 // ---------------- screenshots ----------------
@@ -73,12 +86,10 @@ async function openSample(page) {
 // ---------------- demo video ----------------
 const cues = [];
 const t0 = Date.now();
-let cueStart = 0;
 function cue(text) {
   const now = (Date.now() - t0) / 1000;
   if (cues.length) cues[cues.length - 1].end = now;
   cues.push({ start: now, end: now + 4, text });
-  cueStart = now;
 }
 
 const vctx = await browser.newContext({
@@ -96,7 +107,7 @@ const card = (title, body) => `<!doctype html><html><body style="margin:0;height
 
 cue("Sleep or Serum: before you buy that eye cream, check last night.");
 await page.setContent(card("Before you buy that eye cream,<br/>check last night.",
-  "A one-question shopping assistant built on the <b>YouCam AI Skin Analysis API</b>."));
+  "A pause before an impulse purchase, with observations from the <b>YouCam AI Skin Analysis API</b>."));
 await wait(6000);
 
 cue("Judges can try Sample mode for free: it replays a real, recorded YouCam API result.");
@@ -104,18 +115,18 @@ await openSample(page);
 await page.getByTestId("hours").fill("7.5");
 await wait(5500);
 
-cue("Step 2: how long did you sleep? The sky gets darker as the night gets shorter.");
+cue("Try example sleep hours. This is a hypothetical scenario, not information about the person pictured.");
 for (const v of ["7", "6.5", "6", "5.5", "5", "4.5"]) {
   await page.getByTestId("hours").fill(v);
   await wait(900);
 }
 await wait(1500);
 
-cue("Step 3: what were you about to buy? Here: an eye cream for dark circles.");
+cue("Choose the cosmetic concern you want to review. Here, we select dark circles.");
 await page.getByTestId("wanted").selectOption("dark_circle_v2");
 await wait(4000);
 
-cue("Look in the mirror. In live mode this uploads the photo and polls the YouCam skin-analysis task.");
+cue("Open the recorded result. Live mode uses a server-side upload and polls a real YouCam analysis task.");
 await page.getByTestId("analyze").click();
 await page.getByTestId("results").waitFor();
 await wait(1200);
@@ -135,15 +146,15 @@ if ((await chips.count()) > 1) {
   await wait(1000);
 }
 
-cue("Verdict: dark circles are sleep-sensitive and the night was short, so sleep 3 good nights first.");
+cue("Pause & reassess: the example sleep input is below seven hours. This prompt does not diagnose a cause.");
 await page.evaluate(() => document.querySelector("[data-testid=verdict]").scrollIntoView({ behavior: "smooth", block: "start" }));
 await wait(6000);
 
-cue("No black box: every rule the app checked is listed, with the cut-offs it used.");
+cue("The app explains its simple reflection rule. Appearance scores are separate from the sleep input.");
 await page.evaluate(() => document.querySelector("[data-testid=how]").scrollIntoView({ behavior: "smooth", block: "center" }));
 await wait(6000);
 
-cue("Slept 8 hours instead? Sleep is not the likely fix, so the app suggests a product category.");
+cue("At eight example hours, the prompt changes to Review your options. The API scores stay the same.");
 await page.evaluate(() => document.querySelector("[data-testid=results]").scrollIntoView({ behavior: "smooth", block: "start" }));
 await wait(1200);
 for (const v of ["5.5", "6.5", "7.5", "8"]) {
@@ -153,11 +164,11 @@ for (const v of ["5.5", "6.5", "7.5", "8"]) {
 await page.evaluate(() => document.querySelector("[data-testid=verdict]").scrollIntoView({ behavior: "smooth", block: "start" }));
 await wait(5000);
 
-cue("Age spots are not sleep-sensitive, so the verdict says: choose a product for it. Categories only, no brands.");
+cue("Change the selected concern to age spots. The app does not claim that you need a product or that sleep caused a score.");
 await page.getByTestId("wanted").selectOption("age_spot");
 await wait(6000);
 
-cue("Every sleep claim cites peer-reviewed research, and the app says clearly: not medical advice.");
+cue("Research is background context, not proof about this person. The app is a cosmetic demo, not medical advice.");
 await page.evaluate(() => document.querySelector(".evidence").scrollIntoView({ behavior: "smooth", block: "start" }));
 await wait(5000);
 await page.evaluate(() => document.querySelector("[data-testid=disclaimer]").scrollIntoView({ behavior: "smooth", block: "center" }));
@@ -170,14 +181,16 @@ await page.setContent(card("Under the hood",
   2&nbsp; PUT&nbsp; selfie &rarr; pre-signed URL<br/>
   3&nbsp; POST /s2s/v2.0/task/skin-analysis<br/>&nbsp;&nbsp;&nbsp; dst_actions: dark_circle_v2, eye_bag, droopy_upper_eyelid, radiance, age_spot<br/>
   4&nbsp; GET&nbsp; /s2s/v2.0/task/skin-analysis/{task_id} &nbsp;(poll)<br/>
-  5&nbsp; ui_score per concern + hours slept &rarr; transparent rule &rarr; verdict</div>
+  5&nbsp; API appearance scores + separate example sleep input &rarr; reflection prompt</div>
   <p style="margin-top:22px">Next.js on Vercel &middot; key only in a server route &middot; Sample mode replays one recorded real result</p>`));
 await wait(9000);
 
-cue("Sleep or Serum: sleep first, or buy with confidence.");
-await page.setContent(card("Sleep first, or buy with confidence.",
+cue("Sleep or Serum: pause, observe, and make a more considered choice.");
+await page.setContent(card("Pause. Observe. Choose thoughtfully.",
   "Built with the YouCam AI Skin Analysis API &middot; Not medical advice"));
 await wait(5000);
+// Keep a complete, readable 95-second walkthrough even if optional overlays are absent.
+await wait(Math.max(0, 95_000 - (Date.now() - t0)));
 cues[cues.length - 1].end = (Date.now() - t0) / 1000;
 
 const video = page.video();

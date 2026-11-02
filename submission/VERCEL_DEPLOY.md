@@ -2,9 +2,9 @@
 
 **Current status:** https://github.com/sese0318/sleep-or-serum is public and the local production build passes. The Node.js 22 production deployment is **READY** at https://sleep-or-serum.vercel.app . Anonymous access returned HTTP 200 and the genuine recorded-result interaction was verified. The public judge entry is ready. The Production-only `YOUCAM_API_KEY` Secret is applied. Fresh production analysis passed: HTTP 200 from `POST /api/analyze`, followed by successful polling with five scores and five overlays. All 17 public Sample mode end-to-end checks also passed.
 
-**The genuine sample is ready.** `data/sample-result.json` has `recorded: true`, with a successful YouCam result recorded on November 2, 2026, at 15:58:46 UTC. It used 12 free units. The saved replay does not require a deployed API key.
+**The genuine sample is ready.** `data/sample-result.json` has `recorded: true`, with a successful YouCam result recorded on November 2, 2026, at 15:58:46 UTC. It used 12 units. The saved replay does not require a deployed API key.
 
-**Current deployment:** `dpl_VBKockgL76ot1w4Y2gfs8fCzoF54`, production, READY. No technical release blockers remain.
+**Current deployment:** `dpl_GscfbGDnYTG72c3rHtK2Yv1agSSH`, production, READY. No technical release blockers remain.
 
 **Public access verified.** With explicit user approval, sign-in protection was removed only for this project. Anonymous HTTP 200 and a successful sample interaction were confirmed at the canonical URL, showing genuine scores 73, 66, 77, 73 and 77. No private bypass credential is needed.
 

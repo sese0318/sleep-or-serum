@@ -34,7 +34,7 @@ The integration follows four steps:
 3. Create an AI Skin Analysis task requesting five SD concerns in JSON format.
 4. Poll the task and display the returned scores and available overlay images.
 
-The API key remains in server environment configuration. The browser uses the app's route handlers. A separate recording script saved a sanitized genuine response and its overlays on November 2, 2026, for a stable judge demonstration without repeated API use. That successful analysis used 12 free units.
+The API key remains in server environment configuration. The browser uses the app's route handlers. A separate recording script saved a sanitized genuine response and its overlays on November 2, 2026, for a stable judge demonstration without repeated API use. That successful analysis used 12 units.
 
 Sample mode is explicitly separated from fresh analysis. It replays a fixed result while allowing judges to explore the app's reflection logic without supplying their own face photo or API key. A preview made from example values is not a genuine API recording and is not final submission evidence.
 
@@ -75,7 +75,7 @@ YouCam AI Skin Analysis API · Next.js · React · TypeScript · Playwright · V
 
 App URL: https://sleep-or-serum.vercel.app . The recorded-sample judge entry is publicly accessible without login; anonymous access and genuine result interaction have been verified.
 
-Open the app URL in a browser. Choose **Sample mode**, enter a sleep value below 7 hours, choose a focus concern and open the mirror. Review the recorded result and the reflection. Change the sleep value to 8 hours: the reflection should change while all recorded API scores remain the same. Change the concern to inspect a different result. Replaying the saved genuine sample does not require a YouCam account or API key. All 17 sample end-to-end checks passed locally. The public judge URL was verified with anonymous HTTP 200 and a successful recorded-result interaction.
+Open the app URL in a browser. Choose **Sample mode**, enter a sleep value below 7 hours, choose a focus concern and open the mirror. Review the recorded result and the reflection. Change the sleep value to 8 hours: the reflection should change while all recorded API scores remain the same. Change the concern to inspect a different result. Replaying the saved genuine sample does not require a YouCam account or API key. All 19 sample end-to-end checks passed locally. The public judge URL was verified with anonymous HTTP 200 and a successful recorded-result interaction.
 
 Live mode was verified on the production deployment: a fresh upload request returned HTTP 200 and polling completed with five scores and five overlays. The API key is configured only as a Production Secret. Sample mode also passed all 17 public end-to-end checks. Use only a photo you are authorized to upload.
 

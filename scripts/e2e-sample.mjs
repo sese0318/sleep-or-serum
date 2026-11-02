@@ -52,7 +52,7 @@ ok(/Pause & reassess/i.test(headline), `headline: "${headline}"`);
 
 const originalScores = await page.getByTestId("scores").innerText();
 
-ok((await page.getByTestId("verdict").innerText()).includes("Self-reported sleep is under 7 h (entered: 5 h)"), "5-hour explanation matches input");
+ok((await page.getByTestId("how").innerText()).includes("Self-reported sleep is under 7 h (entered: 5 h)"), "5-hour explanation matches input");
 
 // Case 2: 8 example sleep hours -> review options, without changing API scores
 await page.getByTestId("hours").fill("8");
@@ -61,7 +61,7 @@ ok((await page.getByTestId("verdict").getAttribute("data-kind")) === "choose-pro
 ok(/Review your options/i.test(await page.getByTestId("verdict-headline").innerText()), "review prompt uses neutral wording");
 ok(await page.getByTestId("scores").innerText() === originalScores, "changing example sleep hours does not alter recorded API scores");
 
-ok((await page.getByTestId("verdict").innerText()).includes("Self-reported sleep is at least 7 h (entered: 8 h)"), "8-hour explanation matches input");
+ok((await page.getByTestId("how").innerText()).includes("Self-reported sleep is at least 7 h (entered: 8 h)"), "8-hour explanation matches input");
 
 // Case 3: all concerns use the same self-reported-hours rule
 await page.getByTestId("hours").fill("4");

@@ -1,51 +1,55 @@
 1
-00:00:00,021 --> 00:00:06,032
+00:00:00,331 --> 00:00:06,382
 Sleep or Serum: before you buy that eye cream, check last night.
 
 2
-00:00:06,032 --> 00:00:12,243
+00:00:06,382 --> 00:00:12,610
 Judges can try Sample mode for free: it replays a real, recorded YouCam API result.
 
 3
-00:00:12,243 --> 00:00:19,227
-Step 2: how long did you sleep? The sky gets darker as the night gets shorter.
+00:00:12,610 --> 00:00:19,590
+Try example sleep hours. This is a hypothetical scenario, not information about the person pictured.
 
 4
-00:00:19,227 --> 00:00:23,240
-Step 3: what were you about to buy? Here: an eye cream for dark circles.
+00:00:19,590 --> 00:00:23,610
+Choose the cosmetic concern you want to review. Here, we select dark circles.
 
 5
-00:00:23,240 --> 00:00:30,780
-Look in the mirror. In live mode this uploads the photo and polls the YouCam skin-analysis task.
+00:00:23,610 --> 00:00:31,216
+Open the recorded result. Live mode uses a server-side upload and polls a real YouCam analysis task.
 
 6
-00:00:30,780 --> 00:00:35,291
+00:00:31,216 --> 00:00:35,725
 Five SD concerns from YouCam: dark circles, eye bags, droopy upper eyelid, radiance and age spots.
 
 7
-00:00:35,291 --> 00:00:41,297
-Verdict: dark circles are sleep-sensitive and the night was short, so sleep 3 good nights first.
+00:00:35,725 --> 00:00:42,900
+The mirror can show YouCam's own detection overlay for each concern.
 
 8
-00:00:41,297 --> 00:00:47,305
-No black box: every rule the app checked is listed, with the cut-offs it used.
+00:00:42,900 --> 00:00:48,911
+Pause & reassess: the example sleep input is below seven hours. This prompt does not diagnose a cause.
 
 9
-00:00:47,305 --> 00:00:56,387
-Slept 8 hours instead? Sleep is not the likely fix, so the app suggests a product category.
+00:00:48,911 --> 00:00:54,925
+The app explains its simple reflection rule. Appearance scores are separate from the sleep input.
 
 10
-00:00:56,387 --> 00:01:02,409
-Age spots are not sleep-sensitive, so the verdict says: choose a product for it. Categories only, no brands.
+00:00:54,925 --> 00:01:03,997
+At eight example hours, the prompt changes to Review your options. The API scores stay the same.
 
 11
-00:01:02,409 --> 00:01:11,422
-Every sleep claim cites peer-reviewed research, and the app says clearly: not medical advice.
+00:01:03,997 --> 00:01:10,005
+Change the selected concern to age spots. The app does not claim that you need a product or that sleep caused a score.
 
 12
-00:01:11,422 --> 00:01:20,452
-Under the hood: YouCam File API upload, skin-analysis task, then polling. The API key stays on the server.
+00:01:10,005 --> 00:01:19,026
+Research is background context, not proof about this person. The app is a cosmetic demo, not medical advice.
 
 13
-00:01:20,452 --> 00:01:25,462
-Sleep or Serum: sleep first, or buy with confidence.
+00:01:19,026 --> 00:01:28,062
+Under the hood: YouCam File API upload, skin-analysis task, then polling. The API key stays on the server.
+
+14
+00:01:28,062 --> 00:01:35,011
+Sleep or Serum: pause, observe, and make a more considered choice.

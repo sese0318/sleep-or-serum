@@ -6,6 +6,17 @@ Sleep or Serum is a one-screen cosmetic reflection app built with the **YouCam A
 
 The API describes visible features in an image. It does not establish why they appear, measure sleep, diagnose a condition, or determine whether you need a product. Sleep hours never change the API scores.
 
+## Current verification status — November 2, 2026
+
+- **Public source:** https://github.com/sese0318/sleep-or-serum (PUBLIC; anonymous access returned HTTP 200).
+- **Genuine YouCam recording complete:** recorded at `2026-11-02T15:58:46.772Z`, with 8 output items and 6 saved-overlay entries. The single successful analysis used 12 free units.
+- **Local checks passed:** production build; all 17 sample end-to-end checks; home page HTTP 200; invalid task ID and invalid upload HTTP 400. A scan of client build files found no exact API-key value matches.
+- **Public judge app READY:** https://sleep-or-serum.vercel.app — anonymous HTTP 200 and genuine recorded-result interaction verified. Scores displayed: 73, 66, 77, 73, 77. Project-only sign-in protection was removed with explicit user approval.
+- **Live configuration:** `YOUCAM_API_KEY` is saved as a Production-only Secret. A new deployment to apply it and a fresh live-analysis test are still pending; recorded Sample mode is ready now.
+- **Submission media verified:** five refreshed screenshots and a regenerated video use genuine recorded scores. Screenshot and video-frame inspection passed. `submission/demo/demo-captioned.mp4` is H.264, 1280 × 800, 103.2 seconds (1:43), 4,510,381 bytes. Plain MP4, WebM and captions were also regenerated.
+
+The genuine result is in `data/sample-result.json`. The public recorded-sample judge entry and submission media are ready. YouTube publication and Devpost submission are the entrant's actions; the video can be uploaded now.
+
 ## The experience
 
 1. Choose Live mode and upload a face photo, or use the clearly labeled recorded sample when available.
@@ -33,9 +44,9 @@ Requested concerns are `dark_circle_v2`, `eye_bag`, `droopy_upper_eyelid`, `radi
 
 ## Judge access and recorded sample
 
-When a genuine recording is available, Sample mode replays the saved response for the licensed sample photo. It makes no fresh YouCam request and needs no key. Sleep and concern controls recompute only the app's reflection; the recorded API scores stay fixed.
+Sample mode replays the genuine response recorded on November 2, 2026, for the licensed sample photo. It makes no fresh YouCam request and needs no key. Sleep and concern controls recompute only the app's reflection; the recorded API scores stay fixed.
 
-**Recording status is authoritative in `data/sample-result.json`.** A file with `recorded: false` is not a completed API result. A preview using documentation/example values must never be described as a genuine recording or used as final integration evidence. Create the real recording and regenerate screenshots/video before submission.
+**The current `data/sample-result.json` has `recorded: true`.** The saved response came from one successful YouCam analysis. A documentation/example preview is not genuine integration evidence; the current screenshots/video have been regenerated and visually checked against this recorded result.
 
 `scripts/record-sample.mjs` uses the same upload, task and polling flow, removes temporary IDs and signed URLs, and saves available overlays locally. Confirm free-unit balance before running it. No purchase or automatic recharge is part of this project.
 

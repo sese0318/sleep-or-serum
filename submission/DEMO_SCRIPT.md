@@ -1,16 +1,17 @@
 # Sleep or Serum — demo script
 
-Target length: **1 minute 35 seconds**. English. No music required.
+**Verified final recording:** `submission/demo/demo-captioned.mp4`, **103.2 seconds (1:43)**, H.264, 1280 × 800, 4,510,381 bytes. English captions. The video frame and five updated screenshots were visually reviewed; they show the genuine recorded YouCam result.
 
-Use the regenerated recording that contains the genuine saved API response. Do not upload an older file with a “PREVIEW: docs example values” banner. Check the actual video duration is between 1 and 3 minutes and watch it completely before publishing.
+Use the regenerated recording listed above. Do not upload an older file with a “PREVIEW: docs example values” banner. Its verified duration meets the 1–3 minute requirement; watch it completely before publishing.
 
-Expected files after capture:
+Regenerated files:
 
 - `submission/demo/demo.mp4`: screen recording.
-- `submission/demo/demo-captioned.mp4`: captioned version, if successfully generated.
-- `submission/demo/captions.srt`: English subtitles, if regenerated for this recording.
+- `submission/demo/demo-captioned.mp4`: verified captioned version.
+- `submission/demo/captions.srt`: regenerated English subtitles.
+- `submission/demo/demo.webm`: regenerated raw screen recording.
 
-Timing below is a narration guide. Captions must be synchronized to the final recording; old captions may contain superseded claims and must not be reused unchanged.
+Timing below is an approximate narration guide; the regenerated caption file follows the final recording. Older preview captions must not be reused.
 
 | Time | Screen | Narration |
 |---|---|---|

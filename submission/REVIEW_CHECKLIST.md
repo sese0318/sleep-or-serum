@@ -1,31 +1,29 @@
 # Sleep or Serum — 提出前の確認1枚
 
-**締切：2026年11月2日 11:45 EST（ボストン）／16:45 UTC。** 8:30確認・9:00提出の予定時刻は過ぎているため、完成品を以下の順で確認する。
+**締切：2026年11月2日 11:45 EST（ボストン）／16:45 UTC。**
+
+**完成・確認済み：** 公開GitHub、本物のYouCam記録（12無料単位）、build、17項目のSample E2E、実データの画面写真5枚、字幕付き動画103.2秒（1:43）。動画はH.264・1280×800。クライアント出力にAPIキー完全一致0件。
+
+**公開確認済み：** 本人の明示同意でこのプロジェクトの保護を解除。公開URLは匿名200、実データ表示も確認済み。**動画は今すぐ投稿可能。** Production限定のAPIキーは保存済みだが、適用デプロイと新規ライブ解析は確認待ち。審査は動作確認済みのSample modeを使う。
 
 | 順番 | 確認するもの | 合格条件 |
 |---|---|---|
-| 1 | 公開アプリ | シークレットウィンドウで開く。ログインなしでSample modeを操作できる |
-| 2 | 本物のAPI記録 | `data/sample-result.json`が`recorded: true`。画面に記録済み見本の表示があり、docs exampleの仮値ではない |
-| 3 | 画面の動作 | 4.5時間→8時間で振り返り文が変わり、APIスコアは変わらない。写真・数値・説明が読める |
-| 4 | 公開GitHub | サインアウトしてリポジトリを開ける。README・ソース・画像出典・ライセンスがある。鍵と個人メールが公開されていない |
-| 5 | 動画 | 更新済み動画を通して見る。英語、1〜3分、実際の操作、YouCam API名、本物の記録済み見本と明示。古いPREVIEW動画を使わない |
-| 6 | YouTube投稿 | **本人がPublicで投稿**。公開URLを別ブラウザで確認する |
-| 7 | Devpost | **本人が送信**。英語説明、公開アプリURL、GitHub URL、動画URL、最新画面写真を入れて締切前にSubmit |
+| 1 | 公開アプリ | 下記URLをシークレットウィンドウで開く。ログインなしで記録済みSample modeが動く |
+| 2 | 画面の動作 | 実データと記録済み見本表示。4.5時間→8時間で振り返り文だけが変わり、APIスコアは同じ |
+| 3 | 公開GitHub | ソース・README・画像出典・ライセンスを確認。鍵と個人メールが公開されていない |
+| 4 | 最新動画 | `demo-captioned.mp4`を全編確認。英語1:43、実操作、YouCam API名、記録済み見本と明示 |
+| 5 | YouTube投稿 | **本人がPublicで投稿**し、公開URLを別ブラウザで確認 |
+| 6 | Devpost送信 | **本人がSubmit**。英語説明・アプリ・GitHub・動画URL・画面写真を入れる |
 
-**URL欄（実際の公開確認後に記入）**
+**URL**
 
-- アプリ：公開URLの検証待ち
-- GitHub候補：https://github.com/sese0318/sleep-or-serum （公開状態の検証待ち）
+- アプリ：https://sleep-or-serum.vercel.app （ログイン不要・実データ表示確認済み）
+- GitHub：https://github.com/sese0318/sleep-or-serum （公開確認済み）
 - YouTube：本人の投稿待ち
 - Devpost：https://youcam-api-skin-ai-ecommerce.devpost.com/
 
-**素材の場所**
+**素材：** `submission/DESCRIPTION.md`（英語説明）、`screenshots/`（最新5枚）、`demo/demo-captioned.mp4`（最新動画・4,510,381 bytes）、`DEMO_SCRIPT.md`（台本）、`VERCEL_DEPLOY.md`（公開手順）。
 
-- 英語説明：`submission/DESCRIPTION.md`
-- 画面写真：`submission/screenshots/`（本物の記録後に再生成した版）
-- 動画：`submission/demo/demo-captioned.mp4` または `demo.mp4`（更新版を全編確認）
-- 台本：`submission/DEMO_SCRIPT.md`
-
-**審査期間中：11月20日11:45 ETまで、無料の審査用入口を維持する。** APIキーはサーバー側のみ。購入・自動課金は行わない。見本の睡眠時間は仮の入力で、写真の人物の実際の睡眠や健康状態を示さない。
+**11月20日11:45 ETまで無料の審査用入口を維持。** 保存済み結果の再生には鍵不要。見本の睡眠時間は仮の入力で、写真の人物の実際の睡眠や健康状態を示さない。購入・自動課金なし。
 
 公式規則：https://youcam-api-skin-ai-ecommerce.devpost.com/rules

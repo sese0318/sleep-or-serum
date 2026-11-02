@@ -14,7 +14,7 @@ Sleep research was the starting point, but this project makes an important disti
 
 Sleep or Serum is a one-screen web app powered by the **YouCam AI Skin Analysis API**.
 
-1. Upload a face photo, or explore the clearly labeled recorded sample when available.
+1. Upload a face photo in configured Live mode, or explore the clearly labeled genuine recorded sample.
 2. Enter last night's sleep hours and choose the appearance concern you want to review.
 3. See five YouCam outputs in a mirror: dark circles, eye bags, droopy upper eyelid, radiance and age spots, with available analysis overlays.
 4. Read one transparent reflection: **Pause & reassess** when entered sleep is below 7 hours, or **Review your options** otherwise.
@@ -34,7 +34,7 @@ The integration follows four steps:
 3. Create an AI Skin Analysis task requesting five SD concerns in JSON format.
 4. Poll the task and display the returned scores and available overlay images.
 
-The API key remains in server environment configuration. The browser uses the app's route handlers. A separate recording script can save a sanitized genuine response and its overlays for a stable judge demonstration without repeated API use.
+The API key remains in server environment configuration. The browser uses the app's route handlers. A separate recording script saved a sanitized genuine response and its overlays on November 2, 2026, for a stable judge demonstration without repeated API use. That successful analysis used 12 free units.
 
 Sample mode is explicitly separated from fresh analysis. It replays a fixed result while allowing judges to explore the app's reflection logic without supplying their own face photo or API key. A preview made from example values is not a genuine API recording and is not final submission evidence.
 
@@ -73,9 +73,11 @@ YouCam AI Skin Analysis API · Next.js · React · TypeScript · Playwright · V
 
 ## Testing instructions
 
-Open the submitted app URL in a browser. Choose **Sample mode**, enter a sleep value below 7 hours, choose a focus concern and open the mirror. Review the recorded result and the reflection. Change the sleep value to 8 hours: the reflection should change while all recorded API scores remain the same. Change the concern to inspect a different result. No account or API key is needed to replay a genuine sample.
+App URL: https://sleep-or-serum.vercel.app . The recorded-sample judge entry is publicly accessible without login; anonymous access and genuine result interaction have been verified.
 
-Live mode is available only when the deployment has a server-side API key and available units. Use only a photo you are authorized to upload.
+Open the app URL in a browser. Choose **Sample mode**, enter a sleep value below 7 hours, choose a focus concern and open the mirror. Review the recorded result and the reflection. Change the sleep value to 8 hours: the reflection should change while all recorded API scores remain the same. Change the concern to inspect a different result. Replaying the saved genuine sample does not require a YouCam account or API key. All 17 sample end-to-end checks passed locally. The public judge URL was verified with anonymous HTTP 200 and a successful recorded-result interaction.
+
+A Production-only API key has been saved. Deployment of that key and a fresh live-analysis test are pending; use Sample mode for the verified judge experience. Use only a photo you are authorized to upload for any later live test.
 
 ## Sources and credits
 

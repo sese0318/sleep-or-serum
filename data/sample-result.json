@@ -1,4 +1,108 @@
 {
-  "recorded": false,
-  "_note": "Not recorded yet. Run `npm run record-sample` once with YOUCAM_API_KEY set in .env.local to replace this file with a real, sanitized YouCam Skin Analysis response."
+  "recorded": true,
+  "recorded_at": "2026-11-02T15:58:46.772Z",
+  "_note": "Real YouCam AI Skin Analysis API response for public/sample/sample-face.jpg, recorded once by scripts/record-sample.mjs and replayed in Sample mode. Task/file IDs and signed URLs were removed.",
+  "source_image": "public/sample/sample-face.jpg (Pexels photo by Wanas Rosa, see CREDITS.md)",
+  "api": {
+    "base": "https://yce-api-01.makeupar.com",
+    "steps": [
+      "POST /s2s/v2.0/file",
+      "PUT <pre-signed URL>",
+      "POST /s2s/v2.0/task/skin-analysis",
+      "GET /s2s/v2.0/task/skin-analysis/{task_id}"
+    ],
+    "docs": "https://docs.perfectcorp.com/reference/ai_skin_analysis"
+  },
+  "request": {
+    "dst_actions": [
+      "dark_circle_v2",
+      "eye_bag",
+      "droopy_upper_eyelid",
+      "radiance",
+      "age_spot"
+    ],
+    "miniserver_args": {
+      "enable_mask_overlay": true
+    },
+    "format": "json"
+  },
+  "units_used": 12,
+  "response": {
+    "status": 200,
+    "data": {
+      "task_status": "success",
+      "results": {
+        "output": [
+          {
+            "ui_score": 77,
+            "mask_urls": [
+              "[signed URL removed; see saved_mask]"
+            ],
+            "raw_score": 72.06727266311646,
+            "type": "droopy_upper_eyelid",
+            "url": null,
+            "saved_mask": "/sample/masks/droopy_upper_eyelid.jpg"
+          },
+          {
+            "ui_score": 66,
+            "mask_urls": [
+              "[signed URL removed; see saved_mask]"
+            ],
+            "raw_score": 45.54743468761444,
+            "type": "eye_bag",
+            "url": null,
+            "saved_mask": "/sample/masks/eye_bag.jpg"
+          },
+          {
+            "ui_score": 77,
+            "mask_urls": [
+              "[signed URL removed; see saved_mask]"
+            ],
+            "raw_score": 83.78792572021484,
+            "type": "age_spot",
+            "url": null,
+            "saved_mask": "/sample/masks/age_spot.jpg"
+          },
+          {
+            "ui_score": 73,
+            "mask_urls": [
+              "[signed URL removed; see saved_mask]"
+            ],
+            "raw_score": 63.647741079330444,
+            "type": "radiance",
+            "url": null,
+            "saved_mask": "/sample/masks/radiance.jpg"
+          },
+          {
+            "ui_score": 73,
+            "mask_urls": [
+              "[signed URL removed; see saved_mask]"
+            ],
+            "raw_score": 71.6359406709671,
+            "type": "dark_circle_v2",
+            "url": null,
+            "saved_mask": "/sample/masks/dark_circle_v2.jpg"
+          },
+          {
+            "score": 73.2,
+            "type": "all",
+            "url": null
+          },
+          {
+            "score": 44,
+            "type": "skin_age",
+            "url": null
+          },
+          {
+            "mask_urls": [
+              "[signed URL removed; see saved_mask]"
+            ],
+            "type": "resize_image",
+            "url": null,
+            "saved_mask": "/sample/masks/resize_image.jpg"
+          }
+        ]
+      }
+    }
+  }
 }

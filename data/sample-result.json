@@ -1,0 +1,4 @@
+{
+  "recorded": false,
+  "_note": "Not recorded yet. Run `npm run record-sample` once with YOUCAM_API_KEY set in .env.local to replace this file with a real, sanitized YouCam Skin Analysis response."
+}

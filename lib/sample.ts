@@ -4,6 +4,8 @@ import { CONCERN_IDS, ConcernId } from "./concerns";
 
 export interface SampleData {
   recorded: boolean;
+  /** Placeholder values (docs example) used only to preview the UI before the real recording exists. */
+  preview: boolean;
   recordedAt?: string;
   unitsUsed?: number | null;
   scores: ConcernScore[];
@@ -30,8 +32,10 @@ export function loadSample(): SampleData {
     }));
   const all = output.find((o) => o.type === "all");
   const age = output.find((o) => o.type === "skin_age");
+  const preview = Boolean(s?.preview) && scores.length > 0;
   return {
-    recorded: Boolean(s?.recorded) && scores.length > 0,
+    recorded: (Boolean(s?.recorded) && scores.length > 0) || preview,
+    preview,
     recordedAt: s?.recorded_at,
     unitsUsed: s?.units_used ?? null,
     scores,

@@ -200,7 +200,7 @@ try {
   execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-i", webm, "-c:v", "libx264", "-pix_fmt", "yuv420p", "-r", "30", "-movflags", "+faststart", path.join(DEMO, "demo.mp4")], { cwd: DEMO });
   console.log("Saved submission/demo/demo.mp4");
   execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-i", "demo.webm", "-vf",
-    "subtitles=captions.srt:force_style='Fontsize=20,PrimaryColour=&H00F4F1EA,BackColour=&H90000000,BorderStyle=4,Outline=0,MarginV=24'",
+    "subtitles=captions.srt:force_style='Fontsize=12,PrimaryColour=&H00F4F1EA,BackColour=&H90000000,BorderStyle=4,Outline=0,MarginV=24'",
     "-c:v", "libx264", "-pix_fmt", "yuv420p", "-r", "30", "-movflags", "+faststart", "demo-captioned.mp4"], { cwd: DEMO });
   console.log("Saved submission/demo/demo-captioned.mp4");
 } catch (e) {

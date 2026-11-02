@@ -1,0 +1,51 @@
+1
+00:00:00,021 --> 00:00:06,032
+Sleep or Serum: before you buy that eye cream, check last night.
+
+2
+00:00:06,032 --> 00:00:12,243
+Judges can try Sample mode for free: it replays a real, recorded YouCam API result.
+
+3
+00:00:12,243 --> 00:00:19,227
+Step 2: how long did you sleep? The sky gets darker as the night gets shorter.
+
+4
+00:00:19,227 --> 00:00:23,240
+Step 3: what were you about to buy? Here: an eye cream for dark circles.
+
+5
+00:00:23,240 --> 00:00:30,780
+Look in the mirror. In live mode this uploads the photo and polls the YouCam skin-analysis task.
+
+6
+00:00:30,780 --> 00:00:35,291
+Five SD concerns from YouCam: dark circles, eye bags, droopy upper eyelid, radiance and age spots.
+
+7
+00:00:35,291 --> 00:00:41,297
+Verdict: dark circles are sleep-sensitive and the night was short, so sleep 3 good nights first.
+
+8
+00:00:41,297 --> 00:00:47,305
+No black box: every rule the app checked is listed, with the cut-offs it used.
+
+9
+00:00:47,305 --> 00:00:56,387
+Slept 8 hours instead? Sleep is not the likely fix, so the app suggests a product category.
+
+10
+00:00:56,387 --> 00:01:02,409
+Age spots are not sleep-sensitive, so the verdict says: choose a product for it. Categories only, no brands.
+
+11
+00:01:02,409 --> 00:01:11,422
+Every sleep claim cites peer-reviewed research, and the app says clearly: not medical advice.
+
+12
+00:01:11,422 --> 00:01:20,452
+Under the hood: YouCam File API upload, skin-analysis task, then polling. The API key stays on the server.
+
+13
+00:01:20,452 --> 00:01:25,462
+Sleep or Serum: sleep first, or buy with confidence.

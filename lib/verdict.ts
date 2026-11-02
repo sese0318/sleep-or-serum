@@ -75,7 +75,7 @@ export function decide(
         ? `Sleep 3 good nights before buying that ${shortName(focus)}.`
         : `Your ${focus.label.toLowerCase()} score is already fine. Sleep 3 good nights before buying anything.`,
       detail:
-        `${focus.label} is one of the looks that changes with sleep loss, and last night was short. ` +
+        `${focus.label}: this is one of the looks that changes with sleep loss, and last night was short. ` +
         `Give it three nights of ${SHORT_SLEEP_HOURS}+ hours, then take another photo. If the score is still low, buy with confidence.`,
       focus,
       focusScore,

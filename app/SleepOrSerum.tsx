@@ -156,6 +156,11 @@ export default function SleepOrSerum({ liveAvailable, sample }: Props) {
             <strong>SAMPLE MODE: no recording yet.</strong> The recorded sample result has not been added to this build. Run{" "}
             <code>npm run record-sample</code> once with an API key, then rebuild.
           </div>
+        ) : mode === "sample" && sample.preview ? (
+          <div className="banner sample" data-testid="sample-banner">
+            <strong>PREVIEW DATA: not a recording.</strong> These scores are the example values from the YouCam Skin Analysis
+            docs, used only to preview the layout until the real sample is recorded with <code>npm run record-sample</code>.
+          </div>
         ) : mode === "sample" ? (
           <div className="banner sample" data-testid="sample-banner">
             <strong>SAMPLE MODE: recorded result.</strong> This replays a real YouCam AI Skin Analysis API response that
@@ -259,7 +264,9 @@ export default function SleepOrSerum({ liveAvailable, sample }: Props) {
         {phase === "result" && scores && verdict && (
           <section ref={resultRef} className="results" data-testid="results">
             {mode === "sample" && (
-              <p className="pill sample-pill">Recorded sample result: real YouCam API output, replayed</p>
+              <p className="pill sample-pill">
+                {sample.preview ? "PREVIEW: docs example values, not a real result" : "Recorded sample result: real YouCam API output, replayed"}
+              </p>
             )}
             <div className="result-grid">
               <div className="mirror-col">
@@ -292,7 +299,7 @@ export default function SleepOrSerum({ liveAvailable, sample }: Props) {
                       <li key={c.id} className={isFocus ? "focus" : ""}>
                         <div className="score-head">
                           <span className="score-label">{c.label}{isFocus && <em> (focus)</em>}</span>
-                          <span className={c.sleepSensitive ? "tag moon" : "tag sun"}>
+                          <span className={c.sleepSensitive ? "tag tag-sleep" : "tag tag-steady"}>
                             {c.sleepSensitive ? "sleep-sensitive" : "not sleep-sensitive"}
                           </span>
                           <span className="score-num">{s.uiScore}</span>

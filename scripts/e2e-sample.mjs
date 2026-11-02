@@ -22,7 +22,7 @@ ok(!/Bearer\s+[A-Za-z0-9]/.test(html), "no Authorization header or key material 
 const sampleTab = page.getByRole("tab", { name: "Sample mode" });
 if ((await sampleTab.getAttribute("aria-selected")) !== "true") await sampleTab.click();
 ok(await page.getByTestId("sample-banner").isVisible(), "Sample mode banner is visible");
-ok(/recorded/i.test(await page.getByTestId("sample-banner").innerText()), "banner says the result is recorded");
+ok(/SAMPLE MODE: recorded result/.test(await page.getByTestId("sample-banner").innerText()), "banner labels it as a recorded real result");
 
 // Case 1: dark circles + 5 h -> sleep first
 await page.getByTestId("wanted").selectOption("dark_circle_v2");
